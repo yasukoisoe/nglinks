@@ -1,0 +1,17 @@
+<!doctype html>
+<meta charset="utf-8"><title>ng links</title>
+<body style="font-family:Arial;font-size:15px;background:#fff;margin:40px">
+<div id="m">loading…</div>
+<script>
+var name = decodeURIComponent(location.hash.slice(1));
+fetch('links.json?' + Date.now()).then(function(r){return r.json()}).then(function(db){
+  var m = document.getElementById('m');
+  if (!name) { m.innerHTML = '<h2 style="font-weight:600">neuroglancer links</h2>' +
+      Object.keys(db).sort().map(function(k){
+        return '<div style="padding:3px 0"><a href="#' + encodeURIComponent(k) + '">' + k + '</a></div>';
+      }).join(''); return; }
+  if (!db[name]) { m.textContent = 'no link named: ' + name; return; }
+  m.textContent = 'opening ' + name + '…';
+  location.replace(db[name]);
+}).catch(function(e){ document.getElementById('m').textContent = 'error: ' + e; });
+</script></body>
